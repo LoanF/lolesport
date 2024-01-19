@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart'; // Ajout de la police 'Colfax'
+import 'package:intl/intl.dart';
 
 class Planning extends StatefulWidget {
   const Planning({Key? key});
@@ -81,7 +81,6 @@ class _WeatherSimulatorState extends State<Planning> {
               leagueName != null ? '$leagueName planning' : 'Loading...',
           style: TextStyle(
             color: Colors.white,
-            fontFamily: 'Colfax-Bold', // Ajout de la police 'Colfax'
           ),
         ),
       ),
@@ -145,7 +144,6 @@ class _WeatherSimulatorState extends State<Planning> {
                                             fontSize: 12,
                                             fontWeight: FontWeight.bold,
                                             color: Colors.white,
-                                            fontFamily: 'Colfax', // Ajout de la police 'Colfax'
                                           ),
                                         ),
                                       ],
@@ -173,7 +171,6 @@ class _WeatherSimulatorState extends State<Planning> {
                                                 style: TextStyle(
                                                   fontSize: 12,
                                                   color: Colors.white,
-                                                  fontFamily: 'Colfax', // Ajout de la police 'Colfax'
                                                 ),
                                                 textAlign: TextAlign.center,
                                               ),
@@ -187,7 +184,6 @@ class _WeatherSimulatorState extends State<Planning> {
                                               fontSize: 15,
                                               fontWeight: FontWeight.bold,
                                               color: Colors.white,
-                                              fontFamily: 'Colfax', // Ajout de la police 'Colfax'
                                             ),
                                           ),
                                         ] else ...[
@@ -197,7 +193,6 @@ class _WeatherSimulatorState extends State<Planning> {
                                               fontSize: 15,
                                               fontWeight: FontWeight.bold,
                                               color: Colors.white,
-                                              fontFamily: 'Colfax', // Ajout de la police 'Colfax'
                                             ),
                                           ),
                                         ],
@@ -219,7 +214,6 @@ class _WeatherSimulatorState extends State<Planning> {
                                                 style: TextStyle(
                                                   fontSize: 12,
                                                   color: Colors.white,
-                                                  fontFamily: 'Colfax', // Ajout de la police 'Colfax'
                                                 ),
                                                 textAlign: TextAlign.center,
                                               ),
@@ -239,7 +233,6 @@ class _WeatherSimulatorState extends State<Planning> {
                                             fontSize: 12,
                                             fontWeight: FontWeight.bold,
                                             color: Colors.white,
-                                            fontFamily: 'Colfax', // Ajout de la police 'Colfax'
                                           ),
                                         ),
                                       ],
