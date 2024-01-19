@@ -228,24 +228,6 @@ class _WeatherSimulatorState extends State<Planning> {
           },
         ),
       ),
-      bottomSheet: Container(
-        color: Colors.white,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20.0),
-          child: Container(
-            width: 50.0,
-            height: 50.0,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.blue,
-            ),
-            child: IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.play_arrow, color: Colors.white),
-            ),
-          ),
-        ),
-      ),
     );
   }
 
