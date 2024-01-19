@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lolesport/classement.dart';
+import 'package:lolesport/teams.dart';
 
 void main() {
   runApp(const MyApp());
@@ -20,6 +21,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const MyHomePage(title: 'Flutter Cours Menu'),
         '/classement': (context) => const Classement(),
+        '/teams': (context) => const Teams(equipeName: 'team-bds',),
       },
     );
   }
@@ -51,6 +53,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 Navigator.pushNamed(context, '/classement');
               },
               child: const Text('Voir le classement'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/teams');
+              },
+              child: const Text('Voir les teams'),
             ),
           ],
         ),
