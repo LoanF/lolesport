@@ -6,10 +6,10 @@ class Classement extends StatefulWidget {
   const Classement({super.key});
 
   @override
-  State<Classement> createState() => _WeatherSimulatorState();
+  State<Classement> createState() => _ClassementState();
 }
 
-class _WeatherSimulatorState extends State<Classement> {
+class _ClassementState extends State<Classement> {
   late Future classement;
   late Future ligue;
   @override
@@ -38,13 +38,16 @@ class _WeatherSimulatorState extends State<Classement> {
     final response = await http.get(
       Uri.parse(url),
       headers: {
+        'Content-Type': 'application/json',
+        'Accept-Charset': 'utf-8',
         'x-api-key': '0TvQnueqKa5mxJntVWt0w4LpLfEkrV1Ta8rQBb9Z',
       },
     );
 
     if (response.statusCode == 200) {
-      var res = jsonDecode(response.body);
-      return format(res);
+      String responseBody = utf8.decode(response.bodyBytes);
+      Map<String, dynamic> decodedData = jsonDecode(responseBody);
+      return format(decodedData);
     } else {
       throw Exception('${response.statusCode} ${response.body}');
     }

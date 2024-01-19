@@ -17,7 +17,7 @@ class _WeatherSimulatorState extends State<Planning> {
   @override
   void initState() {
     super.initState();
-    String LeagueId = '98767991302996019';//LEC
+    String LeagueId = '98767991302996019'; //LEC
     planning = fetch(
         'https://esports-api.lolesports.com/persisted/gw/getSchedule?hl=fr-FR&leagueId=$LeagueId');
   }
@@ -76,16 +76,16 @@ class _WeatherSimulatorState extends State<Planning> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(221, 54, 53, 53),
+        backgroundColor: const Color.fromARGB(221, 54, 53, 53),
         title: Text(
-              leagueName != null ? '$leagueName planning' : 'Loading...',
-          style: TextStyle(
+          leagueName != null ? '$leagueName planning' : 'Loading...',
+          style: const TextStyle(
             color: Colors.white,
           ),
         ),
       ),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: Color.fromARGB(221, 54, 53, 53),
         ),
         child: Center(
@@ -114,7 +114,7 @@ class _WeatherSimulatorState extends State<Planning> {
                               DateFormat('EEEE–d MMMM').format(
                                 DateTime.parse(dayEvents.first['startTime']),
                               ),
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white,
@@ -124,9 +124,10 @@ class _WeatherSimulatorState extends State<Planning> {
                           // Afficher les matchs du jour
                           for (var event in dayEvents) ...[
                             Card(
-                              margin: const EdgeInsets.symmetric(vertical: 10.0),
+                              margin:
+                                  const EdgeInsets.symmetric(vertical: 10.0),
                               elevation: 5.0,
-                              color: Color.fromARGB(221, 54, 53, 53),
+                              color: const Color.fromARGB(221, 54, 53, 53),
                               child: Padding(
                                 padding: const EdgeInsets.all(10.0),
                                 child: Row(
@@ -140,7 +141,7 @@ class _WeatherSimulatorState extends State<Planning> {
                                       children: [
                                         Text(
                                           _formatTime(event['startTime']),
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                             fontSize: 12,
                                             fontWeight: FontWeight.bold,
                                             color: Colors.white,
@@ -154,9 +155,8 @@ class _WeatherSimulatorState extends State<Planning> {
                                           MainAxisAlignment.center,
                                       children: [
                                         Container(
-                                          margin:
-                                              const EdgeInsets.symmetric(
-                                                  horizontal: 10.0),
+                                          margin: const EdgeInsets.symmetric(
+                                              horizontal: 10.0),
                                           child: Column(
                                             children: [
                                               SizedBox(
@@ -168,7 +168,7 @@ class _WeatherSimulatorState extends State<Planning> {
                                               ),
                                               Text(
                                                 '${event['match']['teams'][0]['name']}',
-                                                style: TextStyle(
+                                                style: const TextStyle(
                                                   fontSize: 12,
                                                   color: Colors.white,
                                                 ),
@@ -180,14 +180,14 @@ class _WeatherSimulatorState extends State<Planning> {
                                         if (event['state'] == 'completed') ...[
                                           Text(
                                             '${event['match']['teams'][0]['result']['gameWins']} - ${event['match']['teams'][1]['result']['gameWins']}',
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                               fontSize: 15,
                                               fontWeight: FontWeight.bold,
                                               color: Colors.white,
                                             ),
                                           ),
                                         ] else ...[
-                                          Text(
+                                          const Text(
                                             'vs',
                                             style: TextStyle(
                                               fontSize: 15,
@@ -197,9 +197,8 @@ class _WeatherSimulatorState extends State<Planning> {
                                           ),
                                         ],
                                         Container(
-                                          margin:
-                                              const EdgeInsets.symmetric(
-                                                  horizontal: 10.0),
+                                          margin: const EdgeInsets.symmetric(
+                                              horizontal: 10.0),
                                           child: Column(
                                             children: [
                                               SizedBox(
@@ -211,7 +210,7 @@ class _WeatherSimulatorState extends State<Planning> {
                                               ),
                                               Text(
                                                 '${event['match']['teams'][1]['name']}',
-                                                style: TextStyle(
+                                                style: const TextStyle(
                                                   fontSize: 12,
                                                   color: Colors.white,
                                                 ),
@@ -229,7 +228,7 @@ class _WeatherSimulatorState extends State<Planning> {
                                       children: [
                                         Text(
                                           leagueName,
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                             fontSize: 12,
                                             fontWeight: FontWeight.bold,
                                             color: Colors.white,
@@ -250,12 +249,12 @@ class _WeatherSimulatorState extends State<Planning> {
               } else if (snapshot.hasError) {
                 return Text(
                   '${snapshot.error}',
-                  style: TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Colors.white),
                 );
               }
 
               // By default, show a loading spinner.
-              return CircularProgressIndicator();
+              return const CircularProgressIndicator();
             },
           ),
         ),
