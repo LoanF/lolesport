@@ -1,9 +1,10 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class Planning extends StatefulWidget {
-  const Planning({super.key});
+  const Planning({Key? key});
 
   @override
   State<Planning> createState() => _WeatherSimulatorState();
@@ -33,10 +34,40 @@ class _WeatherSimulatorState extends State<Planning> {
           jsonDecode(response.body) as Map<String, dynamic>;
       List<Map<String, dynamic>> events =
           res["data"]["schedule"]["events"].cast<Map<String, dynamic>>();
-      return events;
+      return groupEventsByDay(events);
     } else {
       throw Exception('${response.statusCode} ${response.body}');
     }
+  }
+
+  List<List<Map<String, dynamic>>> groupEventsByDay(
+      List<Map<String, dynamic>> events) {
+    List<List<Map<String, dynamic>>> groupedEvents = [];
+
+    DateTime? currentDate;
+    List<Map<String, dynamic>> currentDayEvents = [];
+
+    for (var event in events) {
+      DateTime eventDate = DateTime.parse(event['startTime']);
+      if (currentDate == null || eventDate.day != currentDate.day) {
+        // Nouveau jour
+        if (currentDate != null) {
+          groupedEvents.add(List.from(currentDayEvents));
+        }
+        currentDate = eventDate;
+        currentDayEvents = [event];
+      } else {
+        // Même jour
+        currentDayEvents.add(event);
+      }
+    }
+
+    // Ajouter le dernier jour
+    if (currentDate != null) {
+      groupedEvents.add(List.from(currentDayEvents));
+    }
+
+    return groupedEvents;
   }
 
   @override
@@ -50,114 +81,140 @@ class _WeatherSimulatorState extends State<Planning> {
           future: planning,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
+              List<List<Map<String, dynamic>>> groupedEvents =
+                  snapshot.data as List<List<Map<String, dynamic>>>;
+
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: ListView.builder(
-                  itemCount: (snapshot.data as List<dynamic>).length,
-                  itemBuilder: (context, index) {
-                    Map<String, dynamic> event =
-                        (snapshot.data as List<dynamic>)[index];
+                  itemCount: groupedEvents.length,
+                  itemBuilder: (context, dayIndex) {
+                    List<Map<String, dynamic>> dayEvents =
+                        groupedEvents[dayIndex];
 
-                    String startTime = event['startTime'] ?? '';
-                    String formattedTime = _formatTime(startTime);
-                    String leagueName = event['league']['name'] ?? '';
-
-                    List<Map<String, dynamic>> teams =
-                        (event['match']['teams'] as List<dynamic>?)
-                                ?.cast<Map<String, dynamic>>() ??
-                            [];
-
-                    return Card(
-                      margin: const EdgeInsets.symmetric(vertical: 10.0),
-                      child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            // Left side - Formatted time
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  formattedTime,
-                                  style: const TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Afficher la date du jour
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            DateFormat('EEEE–d MMMM').format(
+                              DateTime.parse(dayEvents.first['startTime']),
                             ),
-                            // Middle - Team logos and vs
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Container(
-                                  margin: const EdgeInsets.symmetric(
-                                      horizontal: 10.0),
-                                  child: Column(
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        // Afficher les matchs du jour
+                        for (var event in dayEvents) ...[
+                          Card(
+                            margin: const EdgeInsets.symmetric(vertical: 10.0),
+                            child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  // Left side - Formatted time
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      Image.network(
-                                        teams[0]['image'],
-                                        width: 70,
-                                        height: 70,
-                                        fit: BoxFit.cover,
-                                      ),
                                       Text(
-                                        '${teams[0]['name']}',
-                                        style: const TextStyle(fontSize: 12),
-                                        textAlign: TextAlign.center,
+                                        _formatTime(event['startTime']),
+                                        style: const TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
                                     ],
                                   ),
-                                ),
-                                if (event['state'] == 'completed') ...[
-                                  Text(
-                                    '${event['match']['teams'][0]['result']['gameWins']} - ${event['match']['teams'][1]['result']['gameWins']}',
-                                    style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                                  // Middle - Team logos and vs
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        margin: const EdgeInsets.symmetric(
+                                            horizontal: 10.0),
+                                        child: Column(
+                                          children: [
+                                            Image.network(
+                                              event['match']['teams'][0]
+                                                  ['image'],
+                                              width: 70,
+                                              height: 70,
+                                              fit: BoxFit.cover,
+                                            ),
+                                            Text(
+                                              '${event['match']['teams'][0]['name']}',
+                                              style:
+                                                  const TextStyle(fontSize: 12),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      if (event['state'] == 'completed') ...[
+                                        Text(
+                                          '${event['match']['teams'][0]['result']['gameWins']} - ${event['match']['teams'][1]['result']['gameWins']}',
+                                          style: const TextStyle(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ] else ...[
+                                        Text(
+                                          'vs',
+                                          style: const TextStyle(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ],
+                                      Container(
+                                        margin: const EdgeInsets.symmetric(
+                                            horizontal: 10.0),
+                                        child: Column(
+                                          children: [
+                                            Image.network(
+                                              event['match']['teams'][1]
+                                                  ['image'],
+                                              width: 70,
+                                              height: 70,
+                                              fit: BoxFit.cover,
+                                            ),
+                                            Text(
+                                              '${event['match']['teams'][1]['name']}',
+                                              style:
+                                                  const TextStyle(fontSize: 12),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ] else ...[
-                                  Text(
-                                    'vs',
-                                    style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                                  // Right side - League
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        event['league']['name'],
+                                        style: const TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ],
-                                Container(
-                                  margin: const EdgeInsets.symmetric(
-                                      horizontal: 10.0),
-                                  child: Column(
-                                    children: [
-                                      Image.network(
-                                        teams[1]['image'],
-                                        width: 70,
-                                        height: 70,
-                                        fit: BoxFit.cover,
-                                      ),
-                                      Text(
-                                        '${teams[1]['name']}',
-                                        style: const TextStyle(fontSize: 12),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
+                              ),
                             ),
-                            // Right side - League
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Text(
-                                  leagueName,
-                                  style: const TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
+                          ),
+                        ],
+                      ],
                     );
                   },
                 ),
