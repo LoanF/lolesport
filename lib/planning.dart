@@ -159,12 +159,12 @@ class _WeatherSimulatorState extends State<Planning> {
                                                   horizontal: 10.0),
                                           child: Column(
                                             children: [
-                                              Image.network(
-                                                event['match']['teams'][0]
-                                                    ['image'],
-                                                width: 70,
-                                                height: 70,
-                                                fit: BoxFit.cover,
+                                              SizedBox(
+                                                height: 80, // Définissez la hauteur souhaitée
+                                                child: Image.network(
+                                                  event['match']['teams'][0]['image'],
+                                                  fit: BoxFit.cover,
+                                                ),
                                               ),
                                               Text(
                                                 '${event['match']['teams'][0]['name']}',
@@ -202,12 +202,12 @@ class _WeatherSimulatorState extends State<Planning> {
                                                   horizontal: 10.0),
                                           child: Column(
                                             children: [
-                                              Image.network(
-                                                event['match']['teams'][1]
-                                                    ['image'],
-                                                width: 70,
-                                                height: 70,
-                                                fit: BoxFit.cover,
+                                              SizedBox(
+                                                height: 80, // Définissez la hauteur souhaitée
+                                                child: Image.network(
+                                                  event['match']['teams'][1]['image'],
+                                                  fit: BoxFit.cover,
+                                                ),
                                               ),
                                               Text(
                                                 '${event['match']['teams'][1]['name']}',
