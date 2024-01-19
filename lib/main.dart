@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lolesport/classement.dart';
+import 'package:lolesport/planning.dart';
 
 void main() {
   runApp(const MyApp());
@@ -20,6 +21,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const MyHomePage(title: 'Flutter Cours Menu'),
         '/classement': (context) => const Classement(),
+        '/planning': (context) => const Planning(),
       },
     );
   }
@@ -51,6 +53,13 @@ class _MyHomePageState extends State<MyHomePage> {
                 Navigator.pushNamed(context, '/classement');
               },
               child: const Text('Voir le classement'),
+            ),
+            SizedBox(height: 20), // Espace entre les boutons
+            TextButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/planning');
+              },
+              child: const Text('Voir le planning'),
             ),
           ],
         ),
