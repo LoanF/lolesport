@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart'; // Ajout de la police 'Colfax'
+import 'package:intl/intl.dart';
 
 class Planning extends StatefulWidget {
   const Planning({Key? key});
@@ -81,7 +81,6 @@ class _WeatherSimulatorState extends State<Planning> {
           leagueName != null ? '$leagueName planning' : 'Loading...',
           style: const TextStyle(
             color: Colors.white,
-            fontFamily: 'Colfax-Bold', // Ajout de la police 'Colfax'
           ),
         ),
       ),
@@ -146,8 +145,6 @@ class _WeatherSimulatorState extends State<Planning> {
                                             fontSize: 12,
                                             fontWeight: FontWeight.bold,
                                             color: Colors.white,
-                                            fontFamily:
-                                                'Colfax', // Ajout de la police 'Colfax'
                                           ),
                                         ),
                                       ],
@@ -162,20 +159,18 @@ class _WeatherSimulatorState extends State<Planning> {
                                               horizontal: 10.0),
                                           child: Column(
                                             children: [
-                                              Image.network(
-                                                event['match']['teams'][0]
-                                                    ['image'],
-                                                width: 70,
-                                                height: 70,
-                                                fit: BoxFit.cover,
+                                              SizedBox(
+                                                height: 80, // Définissez la hauteur souhaitée
+                                                child: Image.network(
+                                                  event['match']['teams'][0]['image'],
+                                                  fit: BoxFit.cover,
+                                                ),
                                               ),
                                               Text(
                                                 '${event['match']['teams'][0]['name']}',
                                                 style: const TextStyle(
                                                   fontSize: 12,
                                                   color: Colors.white,
-                                                  fontFamily:
-                                                      'Colfax', // Ajout de la police 'Colfax'
                                                 ),
                                                 textAlign: TextAlign.center,
                                               ),
@@ -189,8 +184,6 @@ class _WeatherSimulatorState extends State<Planning> {
                                               fontSize: 15,
                                               fontWeight: FontWeight.bold,
                                               color: Colors.white,
-                                              fontFamily:
-                                                  'Colfax', // Ajout de la police 'Colfax'
                                             ),
                                           ),
                                         ] else ...[
@@ -200,8 +193,6 @@ class _WeatherSimulatorState extends State<Planning> {
                                               fontSize: 15,
                                               fontWeight: FontWeight.bold,
                                               color: Colors.white,
-                                              fontFamily:
-                                                  'Colfax', // Ajout de la police 'Colfax'
                                             ),
                                           ),
                                         ],
@@ -210,20 +201,18 @@ class _WeatherSimulatorState extends State<Planning> {
                                               horizontal: 10.0),
                                           child: Column(
                                             children: [
-                                              Image.network(
-                                                event['match']['teams'][1]
-                                                    ['image'],
-                                                width: 70,
-                                                height: 70,
-                                                fit: BoxFit.cover,
+                                              SizedBox(
+                                                height: 80, // Définissez la hauteur souhaitée
+                                                child: Image.network(
+                                                  event['match']['teams'][1]['image'],
+                                                  fit: BoxFit.cover,
+                                                ),
                                               ),
                                               Text(
                                                 '${event['match']['teams'][1]['name']}',
                                                 style: const TextStyle(
                                                   fontSize: 12,
                                                   color: Colors.white,
-                                                  fontFamily:
-                                                      'Colfax', // Ajout de la police 'Colfax'
                                                 ),
                                                 textAlign: TextAlign.center,
                                               ),
@@ -243,8 +232,6 @@ class _WeatherSimulatorState extends State<Planning> {
                                             fontSize: 12,
                                             fontWeight: FontWeight.bold,
                                             color: Colors.white,
-                                            fontFamily:
-                                                'Colfax', // Ajout de la police 'Colfax'
                                           ),
                                         ),
                                       ],
