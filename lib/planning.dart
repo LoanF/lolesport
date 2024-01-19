@@ -110,13 +110,17 @@ class _WeatherSimulatorState extends State<Planning> {
                                     ],
                                   ),
                                 ),
-                                Text(
-                                  'vs',
-                                  style: const TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold,
+                                if (event['state'] == 'completed') ...[
+                                  Text(
+                                    '${event['match']['teams'][0]['result']['gameWins']} - ${event['match']['teams'][1]['result']['gameWins']}',
+                                    style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                                   ),
-                                ),
+                                ] else ...[
+                                  Text(
+                                    'vs',
+                                    style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                                  ),
+                                ],
                                 Container(
                                   margin: const EdgeInsets.symmetric(
                                       horizontal: 10.0),
