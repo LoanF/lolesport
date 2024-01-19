@@ -35,7 +35,7 @@ class _WeatherSimulatorState extends State<Planning> {
           jsonDecode(response.body) as Map<String, dynamic>;
       List<Map<String, dynamic>> events =
           res["data"]["schedule"]["events"].cast<Map<String, dynamic>>();
-      leagueName = events.first['league']['name'] ?? ''; // Assigner la valeur
+      leagueName = events.first['league']['name'] ?? '';
       return groupEventsByDay(events);
     } else {
       throw Exception('${response.statusCode} ${response.body}');
@@ -76,7 +76,11 @@ class _WeatherSimulatorState extends State<Planning> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('$leagueName planning'),
+        backgroundColor: Color.fromARGB(221, 54, 53, 53),
+        title: Text(
+          '$leagueName planning',
+            style: TextStyle(color: Colors.white), // Texte en blanc
+        ),
       ),
       body: Container(
         decoration: BoxDecoration(
