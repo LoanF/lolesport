@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:intl/intl.dart'; // Ajout de la police 'Colfax'
 
 class Planning extends StatefulWidget {
   const Planning({Key? key});
@@ -12,7 +12,7 @@ class Planning extends StatefulWidget {
 
 class _WeatherSimulatorState extends State<Planning> {
   late Future planning;
-  late String leagueName;
+  late String leagueName = '';
 
   @override
   void initState() {
@@ -78,8 +78,11 @@ class _WeatherSimulatorState extends State<Planning> {
       appBar: AppBar(
         backgroundColor: Color.fromARGB(221, 54, 53, 53),
         title: Text(
-          '$leagueName planning',
-            style: TextStyle(color: Colors.white), // Texte en blanc
+              leagueName != null ? '$leagueName planning' : 'Loading...',
+          style: TextStyle(
+            color: Colors.white,
+            fontFamily: 'Colfax-Bold', // Ajout de la police 'Colfax'
+          ),
         ),
       ),
       body: Container(
@@ -112,7 +115,7 @@ class _WeatherSimulatorState extends State<Planning> {
                               DateFormat('EEEE–d MMMM').format(
                                 DateTime.parse(dayEvents.first['startTime']),
                               ),
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white,
@@ -123,6 +126,7 @@ class _WeatherSimulatorState extends State<Planning> {
                           for (var event in dayEvents) ...[
                             Card(
                               margin: const EdgeInsets.symmetric(vertical: 10.0),
+                              elevation: 5.0,
                               color: Color.fromARGB(221, 54, 53, 53),
                               child: Padding(
                                 padding: const EdgeInsets.all(10.0),
@@ -137,10 +141,11 @@ class _WeatherSimulatorState extends State<Planning> {
                                       children: [
                                         Text(
                                           _formatTime(event['startTime']),
-                                          style: const TextStyle(
+                                          style: TextStyle(
                                             fontSize: 12,
                                             fontWeight: FontWeight.bold,
                                             color: Colors.white,
+                                            fontFamily: 'Colfax', // Ajout de la police 'Colfax'
                                           ),
                                         ),
                                       ],
@@ -165,9 +170,10 @@ class _WeatherSimulatorState extends State<Planning> {
                                               ),
                                               Text(
                                                 '${event['match']['teams'][0]['name']}',
-                                                style: const TextStyle(
+                                                style: TextStyle(
                                                   fontSize: 12,
                                                   color: Colors.white,
+                                                  fontFamily: 'Colfax', // Ajout de la police 'Colfax'
                                                 ),
                                                 textAlign: TextAlign.center,
                                               ),
@@ -177,18 +183,22 @@ class _WeatherSimulatorState extends State<Planning> {
                                         if (event['state'] == 'completed') ...[
                                           Text(
                                             '${event['match']['teams'][0]['result']['gameWins']} - ${event['match']['teams'][1]['result']['gameWins']}',
-                                            style: const TextStyle(
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.white),
+                                            style: TextStyle(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white,
+                                              fontFamily: 'Colfax', // Ajout de la police 'Colfax'
+                                            ),
                                           ),
                                         ] else ...[
                                           Text(
                                             'vs',
-                                            style: const TextStyle(
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.white),
+                                            style: TextStyle(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white,
+                                              fontFamily: 'Colfax', // Ajout de la police 'Colfax'
+                                            ),
                                           ),
                                         ],
                                         Container(
@@ -206,9 +216,10 @@ class _WeatherSimulatorState extends State<Planning> {
                                               ),
                                               Text(
                                                 '${event['match']['teams'][1]['name']}',
-                                                style: const TextStyle(
+                                                style: TextStyle(
                                                   fontSize: 12,
                                                   color: Colors.white,
+                                                  fontFamily: 'Colfax', // Ajout de la police 'Colfax'
                                                 ),
                                                 textAlign: TextAlign.center,
                                               ),
@@ -224,10 +235,11 @@ class _WeatherSimulatorState extends State<Planning> {
                                       children: [
                                         Text(
                                           leagueName,
-                                          style: const TextStyle(
+                                          style: TextStyle(
                                             fontSize: 12,
                                             fontWeight: FontWeight.bold,
                                             color: Colors.white,
+                                            fontFamily: 'Colfax', // Ajout de la police 'Colfax'
                                           ),
                                         ),
                                       ],
@@ -245,12 +257,12 @@ class _WeatherSimulatorState extends State<Planning> {
               } else if (snapshot.hasError) {
                 return Text(
                   '${snapshot.error}',
-                  style: const TextStyle(color: Colors.white),
+                  style: TextStyle(color: Colors.white),
                 );
               }
 
               // By default, show a loading spinner.
-              return const CircularProgressIndicator();
+              return CircularProgressIndicator();
             },
           ),
         ),
