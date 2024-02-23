@@ -187,7 +187,7 @@ class _WeatherSimulatorState extends State<Planning> {
                                                 ),
                                               ),
                                               Text(
-                                                '${event['match']['teams'][0]['name']}',
+                                                '${event['match']['teams'][0]['code']}',
                                                 style: const TextStyle(
                                                   fontSize: 12,
                                                   color: Colors.white,
@@ -231,7 +231,7 @@ class _WeatherSimulatorState extends State<Planning> {
                                                 ),
                                               ),
                                               Text(
-                                                '${event['match']['teams'][1]['name']}',
+                                                '${event['match']['teams'][1]['code']}',
                                                 style: const TextStyle(
                                                   fontSize: 12,
                                                   color: Colors.white,
