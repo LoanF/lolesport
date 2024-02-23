@@ -54,9 +54,9 @@ class _MyHomePageState extends State<MyHomePage> {
           children: [
             TextButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/classement');
+                Navigator.pushNamed(context, '/ligues');
               },
-              child: const Text('Voir le classement'),
+              child: const Text('Voir les ligues'),
             ),
             TextButton(
               onPressed: () {
