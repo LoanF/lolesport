@@ -12,26 +12,42 @@ class Classement extends StatefulWidget {
 class _ClassementState extends State<Classement> {
   late Future classement;
   late Future ligue;
+  late Future tournamentId;
+  late Map args;
+
   @override
-  void initState() {
-    super.initState();
-    classement = fetch(
-        'https://esports-api.lolesports.com/persisted/gw/getStandingsV3?hl=fr-FR&tournamentId=111560983131400452',
-        teamformat);
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    args = (ModalRoute.of(context)?.settings.arguments ?? <String, dynamic>{})
+        as Map;
 
+    // Now you can use args in your asynchronous calls or other initialization logic
+    _fetchData();
+  }
+
+  Future<void> _fetchData() async {
     ligue = fetch(
-        'https://esports-api.lolesports.com/persisted/gw/getLeagues?hl=fr-FR',
-        liguesFormat);
+        'https://esports-api.lolesports.com/persisted/gw/getLeagues?hl=fr-FR&id=${args['ligueId']}',
+        ligueFormat);
+    tournamentId = await fetch(
+        "https://esports-api.lolesports.com/persisted/gw/getTournamentsForLeague?hl=fr-FR&leagueId=${args['ligueId']}",
+        tournamentIdFormat);
 
-    // Start the simulation when the widget is initialized
+    classement = await fetch(
+        'https://esports-api.lolesports.com/persisted/gw/getStandingsV3?hl=fr-FR&tournamentId=${tournamentId}',
+        teamformat);
   }
 
   dynamic teamformat(Map res) {
     return res["data"]["standings"][0]["stages"][0]["sections"][0]["rankings"];
   }
 
-  dynamic liguesFormat(Map res) {
+  dynamic ligueFormat(Map res) {
     return res["data"]["leagues"];
+  }
+
+  dynamic tournamentIdFormat(Map res) {
+    return res["data"]["leagues"][0]["tournaments"][0]["id"];
   }
 
   Future fetch(String url, dynamic Function(Map) format) async {
@@ -55,6 +71,10 @@ class _ClassementState extends State<Classement> {
 
   @override
   Widget build(BuildContext context) {
+    if (classement == null) {
+      // Handle the case where classement is not initialized yet
+      return const CircularProgressIndicator();
+    }
     return Scaffold(
       backgroundColor: const Color.fromARGB(221, 54, 53, 53),
       appBar: AppBar(
@@ -69,11 +89,6 @@ class _ClassementState extends State<Classement> {
                 return Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Image.network(
-                      snapshot.data[0]['image'],
-                      height: 50.0,
-                      width: 50.0,
-                    ),
                     const SizedBox(width: 10),
                     Title(
                       color: Colors.white,
