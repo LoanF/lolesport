@@ -12,33 +12,50 @@ class Planning extends StatefulWidget {
 
 class _WeatherSimulatorState extends State<Planning> {
   late Future planning;
+  late Future leagues;
+  Map? league;
   late String leagueName = '';
 
   @override
   void initState() {
     super.initState();
-    String LeagueId = '98767991302996019'; //LEC
+    String leagueId = '98767991302996019'; //LEC
     planning = fetch(
-        'https://esports-api.lolesports.com/persisted/gw/getSchedule?hl=fr-FR&leagueId=$LeagueId');
+        'https://esports-api.lolesports.com/persisted/gw/getSchedule?hl=fr-FR&leagueId=$leagueId',
+        planningFormat);
+
+    leagues = fetch(
+        'https://esports-api.lolesports.com/persisted/gw/getLeagues?hl=fr-FR',
+        liguesFormat);
   }
 
-  Future fetch(String url) async {
-    final response = await http.get(
-      Uri.parse(url),
-      headers: {
-        'x-api-key': '0TvQnueqKa5mxJntVWt0w4LpLfEkrV1Ta8rQBb9Z',
-      },
-    );
-
-    if (response.statusCode == 200) {
-      Map<String, dynamic> res =
-          jsonDecode(response.body) as Map<String, dynamic>;
+  dynamic planningFormat(Map res) {
       List<Map<String, dynamic>> events =
           res["data"]["schedule"]["events"].cast<Map<String, dynamic>>();
       leagueName = events.first['league']['name'] ?? '';
       return groupEventsByDay(events);
+  }
+
+  dynamic liguesFormat(Map res) {
+    return res["data"]["leagues"];
+  }
+
+  Future fetch(String url, dynamic Function(Map) format) async {
+    final response = await http.get(
+      Uri.parse(url),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept-Charset': 'utf-8',
+        'x-api-key': '0TvQnueqKa5mxJntVWt0w4LpLfEkrV1Ta8rQBb9Z',
+      },
+    );
+    if (response.statusCode == 200) {
+      String responseBody = utf8.decode(response.bodyBytes);
+      Map<String, dynamic> decodedData = jsonDecode(responseBody);
+      return format(decodedData);
     } else {
-      throw Exception('${response.statusCode} ${response.body}');
+      print("fetch failed");
+      // throw Exception('${response.statusCode} ${response.body}');
     }
   }
 
@@ -50,6 +67,7 @@ class _WeatherSimulatorState extends State<Planning> {
     List<Map<String, dynamic>> currentDayEvents = [];
 
     for (var event in events) {
+      print(event);
       DateTime eventDate = DateTime.parse(event['startTime']);
       if (currentDate == null || eventDate.day != currentDate.day) {
         // Nouveau jour
@@ -68,7 +86,7 @@ class _WeatherSimulatorState extends State<Planning> {
     if (currentDate != null) {
       groupedEvents.add(List.from(currentDayEvents));
     }
-
+    
     return groupedEvents;
   }
 
@@ -160,9 +178,11 @@ class _WeatherSimulatorState extends State<Planning> {
                                           child: Column(
                                             children: [
                                               SizedBox(
-                                                height: 80, // Définissez la hauteur souhaitée
+                                                height:
+                                                    80, // Définissez la hauteur souhaitée
                                                 child: Image.network(
-                                                  event['match']['teams'][0]['image'],
+                                                  event['match']['teams'][0]
+                                                      ['image'],
                                                   fit: BoxFit.cover,
                                                 ),
                                               ),
@@ -202,9 +222,11 @@ class _WeatherSimulatorState extends State<Planning> {
                                           child: Column(
                                             children: [
                                               SizedBox(
-                                                height: 80, // Définissez la hauteur souhaitée
+                                                height:
+                                                    80, // Définissez la hauteur souhaitée
                                                 child: Image.network(
-                                                  event['match']['teams'][1]['image'],
+                                                  event['match']['teams'][1]
+                                                      ['image'],
                                                   fit: BoxFit.cover,
                                                 ),
                                               ),
