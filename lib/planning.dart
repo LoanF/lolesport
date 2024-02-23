@@ -14,12 +14,12 @@ class _WeatherSimulatorState extends State<Planning> {
   late Future planning;
   late Future leagues;
   Map? league;
-  late String leagueName = '';
+  late String leagueSlug = '';
 
   @override
   void initState() {
     super.initState();
-    String leagueId = '98767991302996019'; //LEC
+    String leagueId = '105266103462388553'; //LFL
     planning = fetch(
         'https://esports-api.lolesports.com/persisted/gw/getSchedule?hl=fr-FR&leagueId=$leagueId',
         planningFormat);
@@ -32,7 +32,7 @@ class _WeatherSimulatorState extends State<Planning> {
   dynamic planningFormat(Map res) {
       List<Map<String, dynamic>> events =
           res["data"]["schedule"]["events"].cast<Map<String, dynamic>>();
-      leagueName = events.first['league']['name'] ?? '';
+      leagueSlug = (events.first['league']['slug']).toUpperCase() ?? '';
       return groupEventsByDay(events);
   }
 
@@ -86,7 +86,7 @@ class _WeatherSimulatorState extends State<Planning> {
     if (currentDate != null) {
       groupedEvents.add(List.from(currentDayEvents));
     }
-    
+
     return groupedEvents;
   }
 
@@ -96,7 +96,7 @@ class _WeatherSimulatorState extends State<Planning> {
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(221, 54, 53, 53),
         title: Text(
-          leagueName != null ? '$leagueName planning' : 'Loading...',
+          leagueSlug != null ? '$leagueSlug Planning' : 'Loading...',
           style: const TextStyle(
             color: Colors.white,
           ),
@@ -249,7 +249,7 @@ class _WeatherSimulatorState extends State<Planning> {
                                           CrossAxisAlignment.end,
                                       children: [
                                         Text(
-                                          leagueName,
+                                          leagueSlug,
                                           style: const TextStyle(
                                             fontSize: 12,
                                             fontWeight: FontWeight.bold,
