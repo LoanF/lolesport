@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:lolesport/teams.dart';
 
 class Classement extends StatefulWidget {
   const Classement({Key? key});
@@ -150,7 +151,18 @@ class _ClassementState extends State<Classement> {
                               itemCount: item['teams'].length,
                               itemBuilder: (context, teamIndex) {
                                 Map team = item['teams'][teamIndex];
-                                return Padding(
+                                return GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => Teams(
+                                          equipeName: team['slug'],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child: Padding(
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 5),
                                   child: Row(
@@ -196,7 +208,7 @@ class _ClassementState extends State<Classement> {
                                       ),
                                     ],
                                   ),
-                                );
+                                ));
                               },
                             ),
                           ],

@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'root',
+      title: 'LolEsport',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const MyHomePage(title: 'Flutter Cours Menu'),
         '/classement': (context) => const Classement(),
-        '/teams': (context) => const Teams(equipeName: 'team-bds',),
+        '/teams': (context) => const Teams(equipeName: ''),
         '/ligues': (context) => const Ligues(),
         '/planning': (context) => const Planning(),
       },
@@ -57,12 +57,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 Navigator.pushNamed(context, '/ligues');
               },
               child: const Text('Voir les ligues'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/teams');
-              },
-              child: const Text('Voir les teams'),
             ),
             TextButton(
               onPressed: () {

@@ -17,6 +17,9 @@ class _EquipeState extends State<Teams> {
   @override
   void initState() {
     super.initState();
+    if (widget.equipeName.isEmpty) {
+      throw ArgumentError('Vous devez spécifier le nom de l\'équipe');
+    }
     equipe = fetchEquipe('https://esports-api.lolesports.com/persisted/gw/getTeams?hl=fr-FR&id=${widget.equipeName}');
     lives = fetchLive('https://esports-api.lolesports.com/persisted/gw/getLive?hl=fr-FR');
   }
@@ -229,8 +232,8 @@ class _EquipeState extends State<Teams> {
                                                             image: NetworkImage(
                                                               live['league']['image'], // Remplacez par le chemin du logo de la ligue
                                                             ),
-                                                            width: 40,
-                                                            height: 40,
+                                                            width: 30,
+                                                            height: 30,
                                                           ),
                                                     live['match'] != null ? const SizedBox(width: 10) : const SizedBox(),
                                                     live['match'] != null
@@ -242,7 +245,7 @@ class _EquipeState extends State<Teams> {
                                                               color: Colors.white54,
                                                             ),
                                                           )
-                                                          : const SizedBox(),
+                                                        : const SizedBox(),
                                                     live['match'] != null ? const SizedBox(width: 10) : const SizedBox(),
                                                     live['match'] != null
                                                         ? Column(
