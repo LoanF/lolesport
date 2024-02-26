@@ -4,6 +4,7 @@ import 'package:lolesport/teams.dart';
 import 'package:lolesport/planning.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(const MyApp());
@@ -40,15 +41,22 @@ class _MyHomePageState extends State<MyHomePage> {
   int _selectedDrawerIndex = 0;
   late Future ligue;
   late Object dropdownValue;
+  late SharedPreferences prefs;
 
   @override
   void initState() {
     super.initState();
-    dropdownValue = "98767991302996019";
+    initPrefs();
+  }
+
+  Future<void> initPrefs() async {
+    prefs = await SharedPreferences.getInstance();
+    final pref = prefs.getString('idLeague');
+    dropdownValue = pref ?? "98767991302996019";
   }
 
   @override
-   void didChangeDependencies() {
+  void didChangeDependencies() {
     super.didChangeDependencies();
     _fetchData();
   }
@@ -158,9 +166,10 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                     );
                   }).toList(),
-                  onChanged: (value) async {
+                  onChanged: (value) {
                     setState(() {
                       dropdownValue = value!;
+                      prefs.setString('idLeague', dropdownValue.toString());
                     });
                   },
                 ),
