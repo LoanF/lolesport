@@ -15,35 +15,56 @@ class _ClassementState extends State<Classement> {
   late Future ligue;
   late Future tournamentId;
   late Map args;
+  late Object dropdownValue;
+
+  @override
+  void initState() {
+    super.initState();
+    dropdownValue = "98767991302996019";
+    myOnChangedLogic(dropdownValue);
+  }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    args = (ModalRoute.of(context)?.settings.arguments ?? <String, dynamic>{})
-        as Map;
-
+    args = (ModalRoute.of(context)?.settings.arguments ?? <String, dynamic>{}) as Map;
     // Now you can use args in your asynchronous calls or other initialization logic
     _fetchData();
   }
 
-  Future<void> _fetchData() async {
-    ligue = fetch(
-      'https://esports-api.lolesports.com/persisted/gw/getLeagues?hl=fr-FR&id=${args['ligueId']}',
-      ligueFormat,
-    );
-
-    // Utiliser l'ID du tournoi pour récupérer le classement
-    final classementData = await fetch(
+  void myOnChangedLogic(Object value) async {
+    final ligueSelect = await fetch(
       'https://esports-api.lolesports.com/persisted/gw/getStandingsV3?hl=fr-FR&tournamentId=${await fetch(
-        "https://esports-api.lolesports.com/persisted/gw/getTournamentsForLeague?hl=fr-FR&leagueId=${args['ligueId']}",
+        "https://esports-api.lolesports.com/persisted/gw/getTournamentsForLeague?hl=fr-FR&leagueId=$value",
         tournamentIdFormat,
       )}',
       teamformat,
     );
 
     setState(() {
-      classement = classementData;
+      classement = ligueSelect;
+      dropdownValue = value;
     });
+  }
+
+  Future<void> _fetchData() async {
+    ligue = fetch(
+      'https://esports-api.lolesports.com/persisted/gw/getLeagues?hl=fr-FR',
+      ligueFormat,
+    );
+
+    // Utiliser l'ID du tournoi pour récupérer le classement
+    // final classementData = await fetch(
+    //   'https://esports-api.lolesports.com/persisted/gw/getStandingsV3?hl=fr-FR&tournamentId=${await fetch(
+    //     "https://esports-api.lolesports.com/persisted/gw/getTournamentsForLeague?hl=fr-FR&leagueId=${args['ligueId']}",
+    //     tournamentIdFormat,
+    //   )}',
+    //   teamformat,
+    // );
+
+    // setState(() {
+    //   classement = classementData;
+    // });
   }
 
   dynamic teamformat(Map res) {
@@ -89,36 +110,99 @@ class _ClassementState extends State<Classement> {
           future: ligue,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const SizedBox(width: 10),
-                  Title(
-                    color: Colors.white,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          snapshot.data![0]['name'],
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
+              return DropdownButtonHideUnderline(
+                child: DropdownButton(
+                  dropdownColor: const Color.fromARGB(221, 54, 53, 53),
+                  icon: const Icon(Icons.arrow_drop_down, color: Colors.white),
+                  value: dropdownValue,
+                  isExpanded: true,
+                  items: snapshot.data!.map<DropdownMenuItem<Object>>((item) {
+                    return DropdownMenuItem(
+                      value: item['id'],
+                      child: Row(
+                        children: [
+                          Image(
+                            image: NetworkImage(item['image']),
+                            height: 40.0,
+                            width: 40.0,
                           ),
-                        ),
-                        Text(
-                          snapshot.data![0]['region'],
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 10,
+                          const SizedBox(width: 10),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                item['name'],
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                              Text(
+                                item['region'],
+                                style: const TextStyle(color: Colors.white, fontSize: 10),
+                              ),
+                            ],
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(width: 70),
-                ],
+                        ],
+                      ),
+                    );
+                  }).toList(),
+                  onChanged: (value) async {
+                    final ligueSelect = await fetch(
+                      'https://esports-api.lolesports.com/persisted/gw/getStandingsV3?hl=fr-FR&tournamentId=${await fetch(
+                        "https://esports-api.lolesports.com/persisted/gw/getTournamentsForLeague?hl=fr-FR&leagueId=$value",
+                        tournamentIdFormat,
+                      )}',
+                      teamformat,
+                    );
+
+                    setState(() {
+                      classement = ligueSelect;
+                      dropdownValue = value!;
+                    });
+                  },
+                ),
               );
+
+              // return Row(
+              //   mainAxisAlignment: MainAxisAlignment.center,
+              //   children: [
+              //     Title(
+              //       color: Colors.white,
+              //       child: Column(
+              //         children: [
+              //           Row(
+              //             children: [
+              //               Image(
+              //                 image: NetworkImage(snapshot.data![0]['image']),
+              //                 height: 50.0,
+              //                 width: 50.0,
+              //               ),
+              //               Column(
+              //                 crossAxisAlignment: CrossAxisAlignment.start,
+              //                 children: [
+              //                   Text(
+              //                     snapshot.data![0]['name'],
+              //                     style: const TextStyle(
+              //                       color: Colors.white,
+              //                       fontSize: 20,
+              //                       fontWeight: FontWeight.bold,
+              //                     ),
+              //                   ),
+              //                   Text(
+              //                     snapshot.data![0]['region'],
+              //                     style: const TextStyle(
+              //                       color: Colors.white,
+              //                       fontSize: 10,
+              //                     ),
+              //                   ),
+              //                 ],
+              //               ),
+              //             ],
+              //           ),
+              //         ],
+              //       ),
+              //     ),
+              //     const SizedBox(width: 70),
+              //   ],
+              // );
             } else if (snapshot.hasError) {
               return Text('${snapshot.error}');
             }
@@ -152,63 +236,60 @@ class _ClassementState extends State<Classement> {
                               itemBuilder: (context, teamIndex) {
                                 Map team = item['teams'][teamIndex];
                                 return GestureDetector(
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => Teams(
-                                          equipeName: team['slug'],
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                  child: Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 5),
-                                  child: Row(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 20),
-                                        child: Text(
-                                          item['ordinal'].toString(),
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold,
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => Teams(
+                                            equipeName: team['slug'],
                                           ),
                                         ),
-                                      ),
-                                      Image.network(
-                                        team['image'],
-                                        height: 50.0,
-                                        width: 50.0,
-                                      ),
-                                      const SizedBox(width: 10),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                      );
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 5),
+                                      child: Row(
                                         children: [
-                                          Text(
-                                            "${team['name']}",
-                                            style: const TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.bold,
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                                            child: Text(
+                                              item['ordinal'].toString(),
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold,
+                                              ),
                                             ),
                                           ),
-                                          Text(
-                                            "${team["record"]["wins"]} Victoire(s) / ${team["record"]["losses"]} Défaite(s)",
-                                            style: const TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 15,
-                                            ),
+                                          Image.network(
+                                            team['image'],
+                                            height: 50.0,
+                                            width: 50.0,
+                                          ),
+                                          const SizedBox(width: 10),
+                                          Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                "${team['name']}",
+                                                style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                              Text(
+                                                "${team["record"]["wins"]} Victoire(s) / ${team["record"]["losses"]} Défaite(s)",
+                                                style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 15,
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ],
                                       ),
-                                    ],
-                                  ),
-                                ));
+                                    ));
                               },
                             ),
                           ],
