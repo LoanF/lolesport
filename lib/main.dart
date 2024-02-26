@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lolesport/classement.dart';
+import 'package:lolesport/home.dart';
 import 'package:lolesport/planning.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -37,7 +38,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _selectedDrawerIndex = 0;
+  int _selectedDrawerIndex = 1;
   late Future ligue;
   late Object dropdownValue;
   late SharedPreferences prefs;
@@ -95,6 +96,8 @@ class _MyHomePageState extends State<MyHomePage> {
       case 0:
         return const Planning();
       case 1:
+        return const Home();
+      case 2:
         return Classement(idLeague: dropdownValue.toString());
       default:
         return const Text("");
@@ -119,6 +122,10 @@ class _MyHomePageState extends State<MyHomePage> {
           BottomNavigationBarItem(
             icon: Icon(Icons.calendar_month),
             label: 'Planning',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Accueil',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.reorder),
