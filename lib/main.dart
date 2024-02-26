@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lolesport/classement.dart';
 import 'package:lolesport/teams.dart';
-import 'package:lolesport/ligues.dart';
 import 'package:lolesport/planning.dart';
 
 void main() {
@@ -20,10 +19,9 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       routes: {
-        '/': (context) => const MyHomePage(title: 'Flutter Cours Menu'),
+        '/': (context) => const MyHomePage(title: 'LolEsport'),
         '/classement': (context) => const Classement(),
         '/teams': (context) => const Teams(equipeName: ''),
-        '/ligues': (context) => const Ligues(),
         '/planning': (context) => const Planning(),
       },
     );
