@@ -22,9 +22,6 @@ class MyApp extends StatelessWidget {
       ),
       routes: {
         '/': (context) => const MyHomePage(title: 'LolEsport'),
-        '/classement': (context) => const Classement(idLeague: null),
-        '/teams': (context) => const Teams(equipeName: ''),
-        '/planning': (context) => const Planning(),
       },
     );
   }
