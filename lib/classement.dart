@@ -160,49 +160,6 @@ class _ClassementState extends State<Classement> {
                   },
                 ),
               );
-
-              // return Row(
-              //   mainAxisAlignment: MainAxisAlignment.center,
-              //   children: [
-              //     Title(
-              //       color: Colors.white,
-              //       child: Column(
-              //         children: [
-              //           Row(
-              //             children: [
-              //               Image(
-              //                 image: NetworkImage(snapshot.data![0]['image']),
-              //                 height: 50.0,
-              //                 width: 50.0,
-              //               ),
-              //               Column(
-              //                 crossAxisAlignment: CrossAxisAlignment.start,
-              //                 children: [
-              //                   Text(
-              //                     snapshot.data![0]['name'],
-              //                     style: const TextStyle(
-              //                       color: Colors.white,
-              //                       fontSize: 20,
-              //                       fontWeight: FontWeight.bold,
-              //                     ),
-              //                   ),
-              //                   Text(
-              //                     snapshot.data![0]['region'],
-              //                     style: const TextStyle(
-              //                       color: Colors.white,
-              //                       fontSize: 10,
-              //                     ),
-              //                   ),
-              //                 ],
-              //               ),
-              //             ],
-              //           ),
-              //         ],
-              //       ),
-              //     ),
-              //     const SizedBox(width: 70),
-              //   ],
-              // );
             } else if (snapshot.hasError) {
               return Text('${snapshot.error}');
             }
@@ -263,8 +220,8 @@ class _ClassementState extends State<Classement> {
                                           ),
                                           Image.network(
                                             team['image'],
-                                            height: 50.0,
-                                            width: 50.0,
+                                            height: 45.0,
+                                            width: 45.0,
                                           ),
                                           const SizedBox(width: 10),
                                           Column(
@@ -279,7 +236,7 @@ class _ClassementState extends State<Classement> {
                                                 ),
                                               ),
                                               Text(
-                                                "${team["record"]["wins"]} Victoire(s) / ${team["record"]["losses"]} Défaite(s)",
+                                                "${team["record"]["wins"]} Victoire(s) - ${team["record"]["losses"]} Défaite(s)",
                                                 style: const TextStyle(
                                                   color: Colors.white,
                                                   fontSize: 15,
