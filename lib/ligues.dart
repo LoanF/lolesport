@@ -51,7 +51,7 @@ class _LiguesState extends State<Ligues> {
         centerTitle: true,
         backgroundColor: const Color.fromARGB(221, 54, 53, 53),
         foregroundColor: Colors.white,
-        title: const Text("Toutes ligues"),
+        title: const Text("Choisissez une ligue"),
       ),
       body: Center(
         child: FutureBuilder(
