@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:lolesport/classement.dart';
-import 'package:lolesport/teams.dart';
 import 'package:lolesport/planning.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -108,6 +107,9 @@ class _MyHomePageState extends State<MyHomePage> {
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         currentIndex: _selectedDrawerIndex,
+        backgroundColor: const Color.fromARGB(221, 54, 53, 53),
+        selectedItemColor: Colors.amber,
+        unselectedItemColor: Colors.white,
         onTap: (int index) {
           setState(() {
             _selectedDrawerIndex = index;
