@@ -23,10 +23,19 @@ class _ClassementState extends State<Classement> {
     dropdownValue = "98767991302996019";
     myOnChangedLogic(dropdownValue);
   }
+  late Object dropdownValue;
+
+  @override
+  void initState() {
+    super.initState();
+    dropdownValue = "98767991302996019";
+    myOnChangedLogic(dropdownValue);
+  }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    args = (ModalRoute.of(context)?.settings.arguments ?? <String, dynamic>{}) as Map;
     args = (ModalRoute.of(context)?.settings.arguments ?? <String, dynamic>{}) as Map;
     // Now you can use args in your asynchronous calls or other initialization logic
     _fetchData();
@@ -34,7 +43,10 @@ class _ClassementState extends State<Classement> {
 
   void myOnChangedLogic(Object value) async {
     final ligueSelect = await fetch(
+  void myOnChangedLogic(Object value) async {
+    final ligueSelect = await fetch(
       'https://esports-api.lolesports.com/persisted/gw/getStandingsV3?hl=fr-FR&tournamentId=${await fetch(
+        "https://esports-api.lolesports.com/persisted/gw/getTournamentsForLeague?hl=fr-FR&leagueId=$value",
         "https://esports-api.lolesports.com/persisted/gw/getTournamentsForLeague?hl=fr-FR&leagueId=$value",
         tournamentIdFormat,
       )}',
@@ -42,6 +54,29 @@ class _ClassementState extends State<Classement> {
     );
 
     setState(() {
+      classement = ligueSelect;
+      dropdownValue = value;
+    });
+  }
+
+  Future<void> _fetchData() async {
+    ligue = fetch(
+      'https://esports-api.lolesports.com/persisted/gw/getLeagues?hl=fr-FR',
+      ligueFormat,
+    );
+
+    // Utiliser l'ID du tournoi pour récupérer le classement
+    // final classementData = await fetch(
+    //   'https://esports-api.lolesports.com/persisted/gw/getStandingsV3?hl=fr-FR&tournamentId=${await fetch(
+    //     "https://esports-api.lolesports.com/persisted/gw/getTournamentsForLeague?hl=fr-FR&leagueId=${args['ligueId']}",
+    //     tournamentIdFormat,
+    //   )}',
+    //   teamformat,
+    // );
+
+    // setState(() {
+    //   classement = classementData;
+    // });
       classement = ligueSelect;
       dropdownValue = value;
     });
@@ -160,6 +195,49 @@ class _ClassementState extends State<Classement> {
                   },
                 ),
               );
+
+              // return Row(
+              //   mainAxisAlignment: MainAxisAlignment.center,
+              //   children: [
+              //     Title(
+              //       color: Colors.white,
+              //       child: Column(
+              //         children: [
+              //           Row(
+              //             children: [
+              //               Image(
+              //                 image: NetworkImage(snapshot.data![0]['image']),
+              //                 height: 50.0,
+              //                 width: 50.0,
+              //               ),
+              //               Column(
+              //                 crossAxisAlignment: CrossAxisAlignment.start,
+              //                 children: [
+              //                   Text(
+              //                     snapshot.data![0]['name'],
+              //                     style: const TextStyle(
+              //                       color: Colors.white,
+              //                       fontSize: 20,
+              //                       fontWeight: FontWeight.bold,
+              //                     ),
+              //                   ),
+              //                   Text(
+              //                     snapshot.data![0]['region'],
+              //                     style: const TextStyle(
+              //                       color: Colors.white,
+              //                       fontSize: 10,
+              //                     ),
+              //                   ),
+              //                 ],
+              //               ),
+              //             ],
+              //           ),
+              //         ],
+              //       ),
+              //     ),
+              //     const SizedBox(width: 70),
+              //   ],
+              // );
             } else if (snapshot.hasError) {
               return Text('${snapshot.error}');
             }
@@ -220,8 +298,8 @@ class _ClassementState extends State<Classement> {
                                           ),
                                           Image.network(
                                             team['image'],
-                                            height: 45.0,
-                                            width: 45.0,
+                                            height: 50.0,
+                                            width: 50.0,
                                           ),
                                           const SizedBox(width: 10),
                                           Column(
@@ -236,7 +314,7 @@ class _ClassementState extends State<Classement> {
                                                 ),
                                               ),
                                               Text(
-                                                "${team["record"]["wins"]} Victoire(s) - ${team["record"]["losses"]} Défaite(s)",
+                                                "${team["record"]["wins"]} Victoire(s) / ${team["record"]["losses"]} Défaite(s)",
                                                 style: const TextStyle(
                                                   color: Colors.white,
                                                   fontSize: 15,
