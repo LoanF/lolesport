@@ -34,7 +34,7 @@ class _PlanningState extends State<Planning> {
 
   void initData() async {
     try {
-      final sheduleJsonData = await fetch('https://esports-api.lolesports.com/perszisted/gw/getSchedule?hl=fr-FR&leagueId=$idLeague');
+      final sheduleJsonData = await fetch('https://esports-api.lolesports.com/persisted/gw/getSchedule?hl=fr-FR&leagueId=$idLeague');
       setState(() {
         schedule = Schedule.fromJson(sheduleJsonData['data']['schedule']);
         leagueSlug = schedule.events[0].league.slug.toUpperCase();
