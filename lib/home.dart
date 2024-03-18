@@ -65,7 +65,7 @@ class _HomeState extends State<Home> {
               FutureBuilder(
                 future: lives,
                 builder: (context, snapshot) {
-                  if (snapshot.hasData) {
+                  if (snapshot.hasData && snapshot.data.length > 0) {
                     int count = snapshot.data.length;
                     return SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
