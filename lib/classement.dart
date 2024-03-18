@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:lolesport/teams.dart';
@@ -15,7 +16,7 @@ class Classement extends StatefulWidget {
 class _ClassementState extends State<Classement> {
   String? get idLeague => widget.idLeague;
   List classement = [];
-
+  
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -49,7 +50,7 @@ class _ClassementState extends State<Classement> {
       headers: {
         'Content-Type': 'application/json',
         'Accept-Charset': 'utf-8',
-        'x-api-key': '0TvQnueqKa5mxJntVWt0w4LpLfEkrV1Ta8rQBb9Z',
+        'x-api-key': dotenv.env['API_KEY']!,
       },
     );
 

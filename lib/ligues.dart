@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
@@ -30,7 +31,7 @@ class _LiguesState extends State<Ligues> {
       headers: {
         'Content-Type': 'application/json',
         'Accept-Charset': 'utf-8',
-        'x-api-key': '0TvQnueqKa5mxJntVWt0w4LpLfEkrV1Ta8rQBb9Z',
+        'x-api-key': dotenv.env['API_KEY']!,
       },
     );
 

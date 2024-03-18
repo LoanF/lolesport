@@ -5,8 +5,10 @@ import 'package:lolesport/planning.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
+void main() async {
+  await dotenv.load();
   runApp(const MyApp());
 }
 
@@ -78,7 +80,7 @@ class _MyHomePageState extends State<MyHomePage> {
       headers: {
         'Content-Type': 'application/json',
         'Accept-Charset': 'utf-8',
-        'x-api-key': '0TvQnueqKa5mxJntVWt0w4LpLfEkrV1Ta8rQBb9Z',
+        'x-api-key': dotenv.env['API_KEY']!,
       },
     );
 
@@ -180,7 +182,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       dropdownValue = value!;
                       prefs.setString('idLeague', dropdownValue.toString());
                     });
-                    
+
                     Navigator.of(context).pushReplacementNamed('/');
                   },
                 ),
