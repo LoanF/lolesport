@@ -180,6 +180,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       dropdownValue = value!;
                       prefs.setString('idLeague', dropdownValue.toString());
                     });
+                    
+                    Navigator.of(context).pushReplacementNamed('/');
                   },
                 ),
               );
