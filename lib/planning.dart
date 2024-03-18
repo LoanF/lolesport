@@ -63,15 +63,6 @@ class _PlanningState extends State<Planning> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color.fromARGB(221, 54, 53, 53),
-        title: Text(
-          leagueSlug.isNotEmpty ? '$leagueSlug Planning' : 'Loading...',
-          style: const TextStyle(
-            color: Colors.white,
-          ),
-        ),
-      ),
       body: Container(
         decoration: const BoxDecoration(
           color: Color.fromARGB(221, 54, 53, 53),
@@ -220,20 +211,7 @@ class _PlanningState extends State<Planning> {
                     ],
                   ),
                 ),
-              ],
-            ),
-            // Right side - League
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(
-                  event.league.slug.toUpperCase(),
-                  style: const TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
+                const SizedBox(width: 50),
               ],
             ),
           ],
