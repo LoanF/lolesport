@@ -94,7 +94,7 @@ class _MyHomePageState extends State<MyHomePage> {
   _getDrawerItemWidget(int pos) {
     switch (pos) {
       case 0:
-        return const Planning();
+        return Planning(idLeague: dropdownValue.toString());
       case 1:
         return const Home();
       case 2:

@@ -15,26 +15,32 @@ class Planning extends StatefulWidget {
 }
 
 class _PlanningState extends State<Planning> {
-  String? get idLeague { return widget.idLeague;}
+  String? get idLeague => widget.idLeague;
   late Schedule schedule = Schedule(events: []);
   late String leagueSlug = '';
 
   @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     initializeDateFormatting('fr_FR', null);
     initData();
+
   }
 
   void initData() async {
     try {
-      final sheduleJsonData = await fetch('https://esports-api.lolesports.com/persisted/gw/getSchedule?hl=fr-FR&leagueId=$idLeague');
+      final sheduleJsonData = await fetch('https://esports-api.lolesports.com/perszisted/gw/getSchedule?hl=fr-FR&leagueId=$idLeague');
       setState(() {
         schedule = Schedule.fromJson(sheduleJsonData['data']['schedule']);
         leagueSlug = schedule.events[0].league.slug.toUpperCase();
       });
     } catch (e) {
-      print('Error initializing data: $e');
+      throw 'Error initializing data: $e';
     }
   }
 
@@ -55,73 +61,72 @@ class _PlanningState extends State<Planning> {
   }
 
   @override
-Widget build(BuildContext context) {
-  return Scaffold(
-    appBar: AppBar(
-      backgroundColor: const Color.fromARGB(221, 54, 53, 53),
-      title: Text(
-        leagueSlug.isNotEmpty ? '$leagueSlug Planning' : 'Loading...',
-        style: const TextStyle(
-          color: Colors.white,
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: const Color.fromARGB(221, 54, 53, 53),
+        title: Text(
+          leagueSlug.isNotEmpty ? '$leagueSlug Planning' : 'Loading...',
+          style: const TextStyle(
+            color: Colors.white,
+          ),
         ),
       ),
-    ),
-    body: Container(
-      decoration: const BoxDecoration(
-        color: Color.fromARGB(221, 54, 53, 53),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: schedule == null
-            ? Center(child: CircularProgressIndicator())
-            : ListView.builder(
-                itemCount: schedule.events.length,
-                itemBuilder: (context, index) {
-                  // Group events by date
-                  Map<String, List<Event>> groupedEvents = {};
-                  for (var event in schedule.events) {
-                    String formattedDate = DateFormat('EEEE d MMMM', 'fr_FR').format(
-                      DateTime.parse(event.startTime),
-                    );
-                    groupedEvents.putIfAbsent(formattedDate, () => []);
-                    groupedEvents[formattedDate]!.add(event);
-                  }
+      body: Container(
+        decoration: const BoxDecoration(
+          color: Color.fromARGB(221, 54, 53, 53),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: schedule == null
+              ? Center(child: CircularProgressIndicator())
+              : ListView.builder(
+                  itemCount: schedule.events.length,
+                  itemBuilder: (context, index) {
+                    // Group events by date
+                    Map<String, List<Event>> groupedEvents = {};
+                    for (var event in schedule.events) {
+                      String formattedDate = DateFormat('EEEE d MMMM', 'fr_FR').format(
+                        DateTime.parse(event.startTime),
+                      );
+                      groupedEvents.putIfAbsent(formattedDate, () => []);
+                      groupedEvents[formattedDate]!.add(event);
+                    }
 
-                  // Build list of cards for each group
-                  List<Widget> dateCards = [];
-                  groupedEvents.forEach((date, events) {
-                    // Add date header
-                    dateCards.add(
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          date,
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                    // Build list of cards for each group
+                    List<Widget> dateCards = [];
+                    groupedEvents.forEach((date, events) {
+                      // Add date header
+                      dateCards.add(
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            date,
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
-                      ),
+                      );
+
+                      // Add event cards for this date
+                      for (var event in events) {
+                        dateCards.add(buildEventCard(event));
+                      }
+                    });
+
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: dateCards,
                     );
-
-                    // Add event cards for this date
-                    for (var event in events) {
-                      dateCards.add(buildEventCard(event));
-                    }
-                  });
-
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: dateCards,
-                  );
-                },
-              ),
+                  },
+                ),
+        ),
       ),
-    ),
-  );
-}
-
+    );
+  }
 
   Widget buildEventCard(Event event) {
     return Card(
@@ -239,8 +244,7 @@ Widget build(BuildContext context) {
 
   String _formatTime(String time) {
     DateTime dateTime = DateTime.parse(time);
-    String formattedTime =
-        '${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}';
+    String formattedTime = '${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}';
     return formattedTime;
   }
 }

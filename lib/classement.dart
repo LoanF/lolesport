@@ -25,7 +25,7 @@ class _ClassementState extends State<Classement> {
   Future<void> _fetchData() async {
     final classementData = await fetch(
       'https://esports-api.lolesports.com/persisted/gw/getStandingsV3?hl=fr-FR&tournamentId=${await fetch(
-        "https://esports-api.lolesports.com/persisted/gw/getTournamentsForLeague?hl=fr-FR&leagueId=${idLeague}",
+        "https://esports-api.lolesports.com/persisted/gw/getTournamentsForLeague?hl=fr-FR&leagueId=$idLeague",
         tournamentIdFormat,
       )}',
       teamformat,
