@@ -247,7 +247,7 @@ class _HomeState extends State<Home> {
                   } else if (snapshot.hasError) {
                     return const Text('Error');
                   } else {
-                    return const Text('Chargement...');
+                    return const Text('');
                   }
                 },
               ),
