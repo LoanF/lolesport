@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:lolesport/classes/planningData.dart';
+import 'package:lolesport/model/planningData.dart';
 
 class Planning extends StatefulWidget {
   const Planning({Key? key, required this.idLeague}) : super(key: key);
@@ -174,6 +174,7 @@ class _PlanningState extends State<Planning> {
                 if (event.state == 'completed') ...[
                   Text(
                     '${event.match.teams[0].result.gameWins} - ${event.match.teams[1].result.gameWins}',
+                  
                     style: const TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,

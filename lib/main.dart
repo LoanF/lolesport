@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:lolesport/classement.dart';
-import 'package:lolesport/home.dart';
-import 'package:lolesport/planning.dart';
+import 'package:lolesport/widgets/pages/classement.dart';
+import 'package:lolesport/widgets/pages/home.dart';
+import 'package:lolesport/widgets/pages/planning.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';

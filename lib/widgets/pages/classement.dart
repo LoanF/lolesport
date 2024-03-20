@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:lolesport/teams.dart';
+import 'package:lolesport/widgets/pages/teams.dart';
 
 class Classement extends StatefulWidget {
   const Classement({Key? key, required this.idLeague}) : super(key: key);
